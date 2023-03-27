@@ -27,9 +27,9 @@ def sender_email(type, email, password, to, subject, text, key):
     msg['To'] = str(to)
     # The email content (your message)
     if key != '':
-        content_text = str(f"===== {str(type)} Encryption Email =====\n")+ str(text) + str(f'\n Encryption Number : {key}') + str("\n===== Go To : https://jeff-04-crypto-chipper-main-b925wc.streamlit.app/")
+        content_text = str(f"===== {str(type)} Encryption Email =====\n")+ str(text) + str(f'\n Encryption Number : {key}') + str("\n===== Go To : https://jeff-04-crypto-chipper-main-37tw3s.streamlit.app/")
     else:
-        content_text = str(f"===== {str(type)} Encryption Email =====\n")+ str(text) + str("\n===== Go To : https://jeff-04-crypto-chipper-main-b925wc.streamlit.app/")
+        content_text = str(f"===== {str(type)} Encryption Email =====\n")+ str(text) + str("\n===== Go To : https://jeff-04-crypto-chipper-main-37tw3s.streamlit.app/")
 
     msg.set_content(str(content_text))
     files = os.listdir('File/')
