@@ -34,7 +34,7 @@ def sender_email(type, email, password, to, subject, text, key):
     msg.set_content(str(content_text))
     files = os.listdir('File/')
     if len(files) > 0:
-        files = files[0]
+        files = files[1]
         with open('File/' + str(files), 'rb') as attach:
             msg.add_attachment(attach.read(), maintype='application', subtype='octet-stream', filename=attach.name)
 
@@ -46,7 +46,7 @@ def sender_email(type, email, password, to, subject, text, key):
     files = os.listdir('File/')
     if len(files) > 0:    
         path_file = os.path.join(os.getcwd(), 'File')
-        files = os.listdir(path_file)[0]
+        files = os.listdir(path_file)[1]
         os.remove(os.path.join(path_file, files))
 def caesar_encrypt(message):
     key = 3
