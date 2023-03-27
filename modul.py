@@ -33,7 +33,7 @@ def sender_email(type, email, password, to, subject, text, key):
 
     msg.set_content(str(content_text))
     files = os.listdir('File/')
-    if len(files) > 0:
+    if len(files) > 1:
         files = files[1]
         with open('File/' + str(files), 'rb') as attach:
             msg.add_attachment(attach.read(), maintype='application', subtype='octet-stream', filename=attach.name)
@@ -44,7 +44,7 @@ def sender_email(type, email, password, to, subject, text, key):
         smtp.send_message(msg)
 
     files = os.listdir('File/')
-    if len(files) > 0:    
+    if len(files) > 1:    
         path_file = os.path.join(os.getcwd(), 'File')
         files = os.listdir(path_file)[1]
         os.remove(os.path.join(path_file, files))
