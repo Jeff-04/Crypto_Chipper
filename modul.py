@@ -27,7 +27,7 @@ def sender_email(type, email, password, to, subject, text, key):
     msg['To'] = str(to)
     # The email content (your message)
     if key != '':
-        content_text = str(f"===== {str(type)} Encryption Email =====\n")+ str(text) + str(f'\n Encryption Number : {key}') + str("\n===== Go To : https://streamlit/test")
+        content_text = str(f"===== {str(type)} Encryption Email =====\n")+ str(text) + str(f'\n Encryption Number : {key}') + str("\n===== Go To : https://jeff-04-crypto-chipper-main-b925wc.streamlit.app/")
     else:
         content_text = str(f"===== {str(type)} Encryption Email =====\n")+ str(text) + str("\n===== Go To : https://streamlit/test")
 
