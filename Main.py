@@ -153,7 +153,7 @@ else:
             option_data = [
                 {'label':"Caesar Chipper"},
                 {'label':"Viginere Chipper"},
-                {'label':"Combined Chipper (Caesar & Viginere)"}
+                {'label':"Caesar & Viginere Chipper"}
             ]
 
             # override the theme, else it will use the Streamlit applied theme
@@ -259,7 +259,7 @@ else:
                                     data_encrypt = modul.encrypt_combined_chipper(str(text), str(number_encrypt))
                                     st.success("Sukses")
                                     st.success(data_encrypt)
-                                    modul.sender_email("Combined Chipper (Caesar & Viginere)", str(st.session_state['login']),str(check_key[1]), str(to), str(subject), str(data_encrypt), key=number_encrypt)
+                                    modul.sender_email("Caesar & Viginere Chipper", str(st.session_state['login']),str(check_key[1]), str(to), str(subject), str(data_encrypt), key=number_encrypt)
                                 else:
                                     st.warning("Setup Email Terlebih Dahulu !")
 
