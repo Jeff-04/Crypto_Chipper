@@ -27,14 +27,14 @@ def sender_email(type, email, password, to, subject, text, key):
     msg['To'] = str(to)
     # The email content (your message)
     if key != '':
-        content_text = str(f"===== {str(type)} Encryption Email =====\n")+ str(text) + str(f'\n Encryption Number : {key}') + str("\n===== Go To : https://jeff-04-crypto-chipper-main-37tw3s.streamlit.app/")
+        content_text = str(f"===== {str(type)} Encryption Email =====\n")+ str(text) + str(f'\n Encryption Key : {key}') + str("\n===== Go To : https://streamlit/test")
     else:
-        content_text = str(f"===== {str(type)} Encryption Email =====\n")+ str(text) + str("\n===== Go To : https://jeff-04-crypto-chipper-main-37tw3s.streamlit.app/")
+        content_text = str(f"===== {str(type)} Encryption Email =====\n")+ str(text) + str("\n===== Go To : https://streamlit/test")
 
     msg.set_content(str(content_text))
     files = os.listdir('File/')
-    if len(files) > 1:
-        files = files[1]
+    if len(files) > 0:
+        files = files[0]
         with open('File/' + str(files), 'rb') as attach:
             msg.add_attachment(attach.read(), maintype='application', subtype='octet-stream', filename=attach.name)
 
@@ -44,105 +44,99 @@ def sender_email(type, email, password, to, subject, text, key):
         smtp.send_message(msg)
 
     files = os.listdir('File/')
-    if len(files) > 1:    
+    if len(files) > 0:    
         path_file = os.path.join(os.getcwd(), 'File')
-        files = os.listdir(path_file)[1]
+        files = os.listdir(path_file)[0]
         os.remove(os.path.join(path_file, files))
+        
 def caesar_encrypt(message):
     key = 3
-    alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    beta = "abcdefghijklmnopqrstuvwxyz"
+    simbol = [chr(i) for i in range(1, 48)] + [chr(i) for i in range(58, 65)] + [chr(i) for i in range(91, 97)] + [chr(i) for i in range(123, 128)]
+    simbol.remove(" ")
+    
+    alpha = "".join(chr(i) for i in range(65, 91))
+    beta = "".join(chr(i) for i in range(97, 123))
+    simbol = "".join(i for i in simbol)
+    number = "".join(chr(i) for i in range(48, 58))
     result = ""
 
+    # print("===== Data Caesar =====")
+    # print("==== Alpha\n{}\n\nBeta\n{}\n\nSimbol\n{}\n\nNumber\n{}\n\n".format(
+    #     alpha, beta, simbol, number
+    # ))
+
     for letter in message:
-        if letter.isupper() == True:
-            if letter in alpha: #if the letter is actually a letter
-                #find the corresponding ciphertext letter in the alphabet
-                letter_index = (alpha.find(letter) + key) % len(alpha)
+        if letter in simbol: #if the letter is actually a letter
+            #find the corresponding ciphertext letter in the simbolbet
+            letter_index = (simbol.find(letter) + key) % len(simbol)
 
-                result = result + alpha[letter_index]
-            else:
-                result = result + letter
-            
-        else:
-            if letter in beta: #if the letter is actually a letter
-                #find the corresponding ciphertext letter in the alphabet
-                letter_index = (beta.find(letter) + key) % len(beta)
-
-                result = result + beta[letter_index]
-            else:
-                result = result + letter
+            result = result + simbol[letter_index]
         
-    # return result
-    # Generate Random Number and Symbol
-    data_encrypt = list(result)
-    data_final = []
-    data_random = string.ascii_letters + string.printable
-    data = int(len(data_encrypt)) + 10
-    for i in range(data):
-        random_choice = random.choice(data_random)
-        data_final.append(random_choice)
+        elif letter in number:
+            letter_index = (number.find(letter) + key) % len(number)
 
-    print(data_encrypt)
-    print(data_final)
+            result = result + number[letter_index]
+        
+        elif letter in alpha:
+            letter_index = (alpha.find(letter) + key) % len(alpha)
 
-    data_index = 0
-    for index, data in enumerate(data_final):
-        get_data = str(random.choice(data_random))
-        if str(data).isalpha():
-            if int(data_index) < int(len(data_encrypt)):
-                data_final[index] = data_encrypt[data_index]
-                data_index += 1
-            
-            else:
-                while get_data.isalpha() == True:
-                    get_data = str(random.choice(data_random))
+            result = result + alpha[letter_index]
+        
+        elif letter in beta:
+            letter_index = (beta.find(letter) + key) % len(beta)
 
-                data_final[index] = str(get_data)
+            result = result + beta[letter_index]
 
         else:
-            continue
-    
-    result = " ".join(i for i in data_final)
+            result = result + letter
+
     return result
 
 def caesar_decrypt(message):
-    # Remove non alphabetic
     key = 3
-    data = []
-
-    for i in message:
-        if str(i).isalpha() == True or str(i) == " ":
-            data.append(str(i))
+    alpha = [chr(i) for i in range(65, 91)]
+    beta = [chr(i) for i in range(97, 123)]
+    simbol = [chr(i) for i in range(1, 48)] + [chr(i) for i in range(58, 65)] + [chr(i) for i in range(91, 97)] + [chr(i) for i in range(123, 128)]
+    simbol.remove(" ")
+    number = [chr(i) for i in range(48, 58)]
     
-    data_final = " ".join(i for i in data)
-    alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    beta = "abcdefghijklmnopqrstuvwxyz"
+    alpha = "".join(i for i in alpha)
+    beta = "".join(i for i in beta)
+    simbol = "".join(i for i in simbol)
+    number = "".join(i for i in number)
     result = ""
 
-    for letter in data_final:
-        if letter.isupper() == True:
-            if letter in alpha: #if the letter is actually a letter
-                #find the corresponding ciphertext letter in the alphabet
-                letter_index = (alpha.find(letter) - key) % len(alpha)
+    for letter in message:
+        if letter in simbol: #if the letter is actually a letter
+            #find the corresponding ciphertext letter in the simbolbet
+            letter_index = (simbol.find(letter) - key) % len(simbol)
 
-                result = result + alpha[letter_index]
-            else:
-                result = result + letter
+            result = result + simbol[letter_index]
         
-        else:
-            if letter in beta: #if the letter is actually a letter
-                #find the corresponding ciphertext letter in the alphabet
-                letter_index = (beta.find(letter) - key) % len(beta)
+        elif letter in number:
+            letter_index = (number.find(letter) - key) % len(number)
 
-                result = result + beta[letter_index]
-            else:
-                result = result + letter
+            result = result + number[letter_index]
+        
+        elif letter in alpha:
+            letter_index = (alpha.find(letter) - key) % len(alpha)
+
+            result = result + alpha[letter_index]
+        
+        elif letter in beta:
+            letter_index = (beta.find(letter) - key) % len(beta)
+
+            result = result + beta[letter_index]
+
+        else:
+            result = result + letter
 
     return result
 
 def viginere_encrypt(plaintext, key):
     try:
+        alpha = "".join(chr(i) for i in range(65, 91))
+        beta = "".join(chr(i) for i in range(97, 123))
         plain_new = plaintext.upper()
         key = key.upper()
         key_length = len(key)
@@ -153,6 +147,8 @@ def viginere_encrypt(plaintext, key):
             value = (plaintext_int[i] + key_as_int[i % key_length]) % 26
             if str(plain_new[i]) == " ":
                 ciphertext.append(" ")
+            elif str(plaintext[i]) not in alpha and str(plaintext[i]) not in beta:
+                ciphertext.append(plaintext[i])
             else:
                 ciphertext.append(chr(value + 65))
         for i in range(len(plaintext)):
@@ -160,216 +156,93 @@ def viginere_encrypt(plaintext, key):
                 ciphertext[i] = str(ciphertext[i]).lower()
         # Generate Random Number and Symbol
         result = "".join(i for i in ciphertext)
-
-        data_encrypt = list(result)
-        data_final = []
-        data_random = string.ascii_letters + string.printable
-        data = int(len(data_encrypt)) + 10
-        for i in range(data):
-            random_choice = random.choice(data_random)
-            data_final.append(random_choice)
-
-        data_index = 0
-        for index, data in enumerate(data_final):
-            get_data = str(random.choice(data_random))
-            if str(data).isalpha():
-                if int(data_index) < int(len(data_encrypt)):
-                    data_final[index] = data_encrypt[data_index]
-                    data_index += 1
-                
-                else:
-                    while get_data.isalpha() == True:
-                        get_data = str(random.choice(data_random))
-
-                    data_final[index] = str(get_data)
-
-            else:
-                continue
-        
-        result = "".join(i for i in data_final)
-        # print(f"Akhir : {result}")
         return result
     
     except Exception as eror:
         print(eror)
 
 
-def viginere_decrypt(cipher, key):
+def viginere_decrypt(plaintext, key):
     try:
-        chiper_new = []
-        for i in range(len(cipher)):
-            if str(cipher[i]).isalpha() == True:
-                chiper_new.append(cipher[i])
-            elif str(cipher[i]) == " ":
-                chiper_new.append(" ")
-        
-        cipher = "".join(i for i in chiper_new)
-        cipher_new = cipher.upper()
+        alpha = "".join(chr(i) for i in range(65, 91))
+        beta = "".join(chr(i) for i in range(97, 123))
+        plain_new = plaintext.upper()
         key = key.upper()
         key_length = len(key)
         key_as_int = [ord(i) for i in key]
-        cipher_int = [ord(i) for i in cipher_new]
-        plaintext = []
-        for i in range(len(cipher_int)):
-            value = (cipher_int[i] - key_as_int[i % key_length]) % 26
-            if str(cipher[i]) == " ":
-                plaintext.append(" ")
+        plaintext_int = [ord(i) for i in plain_new]
+        ciphertext = []
+        for i in range(len(plaintext_int)):
+            value = (plaintext_int[i] - key_as_int[i % key_length]) % 26
+            if str(plain_new[i]) == " ":
+                ciphertext.append(" ")
+            elif str(plaintext[i]) not in alpha and str(plaintext[i]) not in beta:
+                ciphertext.append(plaintext[i])
             else:
-                plaintext.append(chr(value + 65))
-        
+                ciphertext.append(chr(value + 65))
         for i in range(len(plaintext)):
-            if str(chiper_new[i]).isupper() == False:
-                plaintext[i] = str(plaintext[i]).lower()
-
-        plaintext = "".join(i for i in plaintext)
-        return plaintext
+            if str(plaintext[i]).islower() == True:
+                ciphertext[i] = str(ciphertext[i]).lower()
+        # Generate Random Number and Symbol
+        result = "".join(i for i in ciphertext)
+        return result
     
     except Exception as eror:
         print(eror)
 
 def encrypt_combined_chipper(message: str, key: str):
-    print("===== Encrypt Combined Chipper =====")
-    print("Data Awal : {}".format(message))
     # Encrypt Caesar Chipper
     key_caesar = 3
-    alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    beta = "abcdefghijklmnopqrstuvwxyz"
-    result = []
+    alpha = "".join(chr(i) for i in range(65, 91))
+    beta = "".join(chr(i) for i in range(97, 123))
+    result = ""
 
     for letter in message:
-        if letter.isupper() == True:
-            if letter in alpha: #if the letter is actually a letter
-                #find the corresponding ciphertext letter in the alphabet
-                letter_index = (alpha.find(letter) + key_caesar) % len(alpha)
 
-                result.append(alpha[letter_index])
-            else:
-                result.append(letter)
-            
+        if letter in alpha:
+            letter_index = (alpha.find(letter) + key_caesar) % len(alpha)
+
+            result = result + alpha[letter_index]
+        
+        elif letter in beta:
+            letter_index = (beta.find(letter) + key_caesar) % len(beta)
+
+            result = result + beta[letter_index]
+
         else:
-            if letter in beta: #if the letter is actually a letter
-                #find the corresponding ciphertext letter in the alphabet
-                letter_index = (beta.find(letter) + key_caesar) % len(beta)
+            result = result + letter
 
-                result.append(beta[letter_index])
-            else:
-                result.append(letter)
-
-    # Caesar Output  
-    result_caesar = "".join(i for i in result)
-    print("Hasil Caesar : {}".format(result_caesar))
+    result_caesar = result
 
 
     # Viginere Chippper
-    plain_new = result_caesar.upper()
-    key_length = len(key)
-    key_as_int = [ord(i) for i in key]
-    plaintext_int = [ord(i) for i in plain_new]
-    ciphertext = []
-    for i in range(len(plaintext_int)):
-        value = (plaintext_int[i] + key_as_int[i % key_length]) % 26
-        if str(plain_new[i]) == " ":
-            ciphertext.append(" ")
-        else:
-            ciphertext.append(chr(value + 65))
-
-    for i in range(len(result_caesar)):
-        if str(result_caesar[i]).islower() == True:
-            ciphertext[i] = str(ciphertext[i]).lower()
-
-    result_viginere = "".join(i for i in ciphertext)
-    print("Hasil Viginere : {}".format(result_viginere))
-
-    # Final Encryption
-    data_encrypt = list(result_viginere)
-    data_final = []
-    data_random = string.ascii_letters + string.printable
-    data = int(len(data_encrypt)) + 10
-    for i in range(data):
-        random_choice = random.choice(data_random)
-        data_final.append(random_choice)
-
-    data_index = 0
-    for index, data in enumerate(data_final):
-        get_data = str(random.choice(data_random))
-        if str(data).isalpha():
-            if int(data_index) < int(len(data_encrypt)):
-                data_final[index] = data_encrypt[data_index]
-                data_index += 1
-            
-            else:
-                while get_data.isalpha() == True:
-                    get_data = str(random.choice(data_random))
-
-                data_final[index] = str(get_data)
-
-        else:
-            continue
-    
-    result = "".join(i for i in data_final)
-    print("Hasil Final : {}".format(result))
-    # print(f"Akhir : {result}")
-    return result
+    return viginere_encrypt(result_caesar, str(key))
 
 
 def decrypt_combined_chipper(cipher, key):
-    print("===== Decrypt Combined Chipper =====")
-    # Decrypy Viginere
-    chiper_new = []
-    for i in range(len(cipher)):
-        if str(cipher[i]).isalpha() == True:
-            chiper_new.append(cipher[i])
-        elif str(cipher[i]) == " ":
-            chiper_new.append(" ")
-    
-    cipher = "".join(i for i in chiper_new)
-    cipher_new = cipher.upper()
-    key = key.upper()
-    key_length = len(key)
-    key_as_int = [ord(i) for i in key]
-    cipher_int = [ord(i) for i in cipher_new]
-    plaintext = []
-    for i in range(len(cipher_int)):
-        value = (cipher_int[i] - key_as_int[i % key_length]) % 26
-        if str(cipher[i]) == " ":
-            plaintext.append(" ")
-        else:
-            plaintext.append(chr(value + 65))
-    
-    for i in range(len(plaintext)):
-        if str(chiper_new[i]).isupper() == False:
-            plaintext[i] = str(plaintext[i]).lower()
-
-    plaintext = "".join(i for i in plaintext)
-    print("Decrypt Viginere : {}".format(plaintext))
+    data_viginere = viginere_decrypt(cipher, key)
 
     # Decrypt Caesar
-    alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    beta = "abcdefghijklmnopqrstuvwxyz"
-    result = []
     key_caesar = 3
+    alpha = "".join(chr(i) for i in range(65, 91))
+    beta = "".join(chr(i) for i in range(97, 123))
+    result = ""
 
-    for letter in plaintext:
-        if letter.isupper() == True:
-            if letter in alpha: #if the letter is actually a letter
-                #find the corresponding ciphertext letter in the alphabet
-                letter_index = (alpha.find(letter) - key_caesar) % len(alpha)
+    for letter in data_viginere:
 
-                result.append(alpha[letter_index])
-            else:
-                result.append(letter)
+        if letter in alpha:
+            letter_index = (alpha.find(letter) - key_caesar) % len(alpha)
+
+            result = result + alpha[letter_index]
         
+        elif letter in beta:
+            letter_index = (beta.find(letter) - key_caesar) % len(beta)
+
+            result = result + beta[letter_index]
+
         else:
-            if letter in beta: #if the letter is actually a letter
-                #find the corresponding ciphertext letter in the alphabet
-                letter_index = (beta.find(letter) - key_caesar) % len(beta)
+            result = result + letter
 
-                result.append(beta[letter_index])
-            else:
-                result.append(letter)
-
-    result = "".join(i for i in result)
-    print("Decrypt Caesar : {}".format(result))
     return result
 
 def signup(email_inp, nama_inp, password_inp):
