@@ -29,7 +29,7 @@ if 'login' not in st.session_state:
 if st.session_state['login'] == '':
     buffer, col1, col2, col3 = st.columns([.75, 3.5, .5, 4])
     with col1:
-        st.markdown("<h3 align='center'> Sistem Pengamanan Pesan Email Menggunakan Enkripsi Chaesar Chipper dan Vigenere Cipher</h3>", unsafe_allow_html=True)
+        st.markdown("<h3 align='center'> Sistem Pengamanan Pesan Email Menggunakan Enkripsi Chaesar Chipper dan Vigenere Chipper</h3>", unsafe_allow_html=True)
         for i in range(3):
             st.write("")
         
@@ -113,7 +113,7 @@ else:
         ''', unsafe_allow_html=True)
 
         st.markdown('''
-        <h3 align='center'> Chaesar Chipper dan Vigenere Cipher</h3>
+        <h3 align='center'> Chaesar Chipper dan Vigenere Chipper</h3>
         ''', unsafe_allow_html=True)
 
         buffer, col1, col2 = st.columns([2, 6, 2])
@@ -203,7 +203,7 @@ else:
                         to = st.text_input("To", placeholder="example@gmail.com")
                         subject = st.text_input("Subject")
                         text = st.text_area("Body")
-                        number_encrypt = st.number_input('Key', min_value=1, max_value=100)
+                        number_encrypt = st.text_input('Key')
                         uploaded_file = st.file_uploader("Choose a file")
                         submit = st.form_submit_button("Enkripsi")
 
@@ -239,7 +239,7 @@ else:
                         to = st.text_input("To", placeholder="example@gmail.com")
                         subject = st.text_input("Subject")
                         text = st.text_area("Body")
-                        number_encrypt = st.number_input('Key', min_value=1, max_value=100)
+                        number_encrypt = st.text_input('Key')
                         uploaded_file = st.file_uploader("Choose a file")
                         submit = st.form_submit_button("Enkripsi")
 
@@ -291,7 +291,7 @@ else:
 
                     with decryption_form.form('Dekripsi'):
                         text = st.text_area("Masukan Text")
-                        enkripsi_number = st.number_input("Number Decryption", min_value=1, max_value=99, step=1)
+                        enkripsi_number = st.text_input("Key Decryption")
                         submit = st.form_submit_button("Enkripsi")
 
                         if submit:
@@ -310,7 +310,7 @@ else:
 
                     with decryption_form.form('Dekripsi'):
                         text = st.text_area("Masukan Text")
-                        enkripsi_number = st.number_input("Number Decryption", min_value=1, max_value=99, step=1)
+                        enkripsi_number = st.text_input("Key Decryption")
                         submit = st.form_submit_button("Enkripsi")
 
                         if submit:
@@ -321,6 +321,21 @@ else:
                                 st.success("Sukses")
                                 data_encrypt = modul.decrypt_combined_chipper(str(text), str(enkripsi_number))
                                 st.success(data_encrypt)
+
+    # elif selected == "Message":
+    #     option_data = [
+    #             {'label':"Inbox"},
+    #             {'label':"Notification"}
+    #         ]
+
+    #     # override the theme, else it will use the Streamlit applied theme
+    #     over_theme = {'txc_inactive': 'black','menu_background':'#eee','txc_active':'black','option_active':'#fafafa'}
+    #     font_fmt = {'font-class':'h2','font-size':'150%'}
+
+    #     # display a horizontal version of the option bar
+    #     op = hc.option_bar(option_definition=option_data,key='PrimaryOption',override_theme=over_theme,font_styling=font_fmt,horizontal_orientation=True)
+
+    #     if str(op) == "Inbox":
 
 
     elif selected == "Setup Email":
