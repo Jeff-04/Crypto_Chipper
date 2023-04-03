@@ -92,7 +92,6 @@ def caesar_encrypt(message, key):
     return result
 
 def caesar_decrypt(message, key):
-    key = 3
     alpha = [chr(i) for i in range(65, 91)]
     beta = [chr(i) for i in range(97, 123)]
     simbol = [chr(i) for i in range(1, 48)] + [chr(i) for i in range(58, 65)] + [chr(i) for i in range(91, 97)] + [chr(i) for i in range(123, 128)]
