@@ -96,7 +96,7 @@ else:
     with st.sidebar:
         selected = option_menu(
         menu_title = None,
-        options = ['Beranda', 'Encryption', 'Setup Email', 'Logout'],
+        options = ['Beranda', 'Encryption',  'Setup Email', 'Logout'],
         icons = ["house", "file-earmark-lock-fill", 'envelope', "box-arrow-left"],
         menu_icon = 'cast',
         orientation = "vertical",
@@ -153,7 +153,7 @@ else:
             option_data = [
                 {'label':"Caesar Chipper"},
                 {'label':"Viginere Chipper"},
-                {'label':"Caesar & Viginere Chipper"}
+                {'label':"Combined Chipper (Caesar & Viginere)"}
             ]
 
             # override the theme, else it will use the Streamlit applied theme
@@ -172,6 +172,7 @@ else:
                         to = st.text_input("To", placeholder="example@gmail.com")
                         subject = st.text_input("Subject")
                         text = st.text_area("Body")
+                        number_encrypt = st.number_input('Key Number', step=1, min_value=1, max_value=25)
                         uploaded_file = st.file_uploader("Choose a file")
                         submit = st.form_submit_button("Enkripsi")
 
@@ -188,12 +189,13 @@ else:
 
                                 check_key = modul.check_key(str(st.session_state['login']))
                                 if type(check_key) != bool:
-                                    data_encrypt = modul.caesar_encrypt(str(text))
+                                    data_encrypt = modul.caesar_encrypt(str(text), number_encrypt)
                                     st.success("Sukses")
                                     st.success(data_encrypt)
-                                    modul.sender_email("Caesar Chipper", str(st.session_state['login']),str(check_key[1]), str(to), str(subject), str(data_encrypt), key='')
+                                    modul.sender_email("Caesar Chipper", str(st.session_state['login']),str(check_key[1]), str(to), str(subject), str(data_encrypt), key=number_encrypt)
                                 else:
                                     st.warning("Setup Email Terlebih Dahulu !")
+
             elif str(op) == "Viginere Chipper":
                 st.markdown("<h3 align='center'>Enkripsi Viginere Chipper</h3>", unsafe_allow_html=True)
                 buffer, col1, col2 = st.columns([2, 6, 2])
@@ -259,7 +261,7 @@ else:
                                     data_encrypt = modul.encrypt_combined_chipper(str(text), str(number_encrypt))
                                     st.success("Sukses")
                                     st.success(data_encrypt)
-                                    modul.sender_email("Caesar & Viginere Chipper", str(st.session_state['login']),str(check_key[1]), str(to), str(subject), str(data_encrypt), key=number_encrypt)
+                                    modul.sender_email("Combined Chipper (Caesar & Viginere)", str(st.session_state['login']),str(check_key[1]), str(to), str(subject), str(data_encrypt), key=number_encrypt)
                                 else:
                                     st.warning("Setup Email Terlebih Dahulu !")
 
@@ -272,7 +274,8 @@ else:
 
                     with decryption_form.form('Dekripsi'):
                         text = st.text_area("Masukan Text")
-                        submit = st.form_submit_button("Enkripsi")
+                        number_encrypt = st.number_input('Key Number', step=1, min_value=1, max_value=25)
+                        submit = st.form_submit_button("Dekripsi")
 
                         if submit:
                             if str(text) == "":
@@ -280,7 +283,7 @@ else:
                             
                             else:
                                 st.success("Sukses")
-                                data_encrypt = modul.caesar_decrypt(str(text))
+                                data_encrypt = modul.caesar_decrypt(str(text), number_encrypt)
                                 st.success(data_encrypt)
 
             elif str(op) == "Viginere Chipper":
@@ -292,7 +295,7 @@ else:
                     with decryption_form.form('Dekripsi'):
                         text = st.text_area("Masukan Text")
                         enkripsi_number = st.text_input("Key Decryption")
-                        submit = st.form_submit_button("Enkripsi")
+                        submit = st.form_submit_button("Dekripsi")
 
                         if submit:
                             if str(text) == "":
@@ -311,7 +314,7 @@ else:
                     with decryption_form.form('Dekripsi'):
                         text = st.text_area("Masukan Text")
                         enkripsi_number = st.text_input("Key Decryption")
-                        submit = st.form_submit_button("Enkripsi")
+                        submit = st.form_submit_button("Dekripsi")
 
                         if submit:
                             if str(text) == "":
